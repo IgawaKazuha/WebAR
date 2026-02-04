@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAR 使い方ガイド</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #5568d3;
+        }
+        
+        .button-secondary {
+            background: #6c757d;
+        }
+        
+        .button-secondary:hover {
+            background: #5a6268;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .marker-preview {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .marker-preview img {
+            max-width: 300px;
+            border: 3px solid #667eea;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📱 WebAR 名刺アプリケーション</h1>
+            <p>QRコードとARマーカーで、名刺を次世代へ</p>
+        </header>
+        
+        <div class="section">
+            <h2>🎯 機能紹介</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="feature-icon">📱</div>
+                    <h3>QRコード統合</h3>
+                    <p>名刺のQRコードから即座にアクセス</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎨</div>
+                    <h3>ARマーカー</h3>
+                    <p>カメラを向けると3D情報を表示</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">✏️</div>
+                    <h3>カスタマイズ可能</h3>
+                    <p>名前・役職・連絡先を自由に編集</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚀</div>
+                    <h3>簡単デプロイ</h3>
+                    <p>GitHub Pagesで即座に公開</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🚀 クイックスタート</h2>
+            <div class="steps">
+                <div class="step">
+                    <h3><span class="step-number">1</span>GitHub Pages設定</h3>
+                    <p>Settings > Pages でmainブランチを選択</p>
+                </div>
+                <div class="step">
+                    <h3><span class="step-number">2</span>マーカー印刷</h3>
+                    <p>marker.pngを5cm×5cmで名刺に印刷</p>
+                </div>
+                <div class="step">
+                    <h3><span class="step-number">3</span>QRコード生成</h3>
+                    <p>marker-generator.htmlでQRコードを作成</p>
+                </div>
+                <div class="step">
+                    <h3><span class="step-number">4</span>情報カスタマイズ</h3>
+                    <p>index.htmlで表示内容を編集</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📋 詳細セットアップ</h2>
+            
+            <h3>1. GitHub Pagesの有効化</h3>
+            <div class="info">
+                <strong>手順:</strong>
+                <ol style="margin-left: 20px; margin-top: 10px;">
+                    <li>GitHubリポジトリの「Settings」タブをクリック</li>
+                    <li>左サイドバーの「Pages」を選択</li>
+                    <li>「Source」で「main」ブランチを選択</li>
+                    <li>「Save」をクリック</li>
+                    <li>数分後、URLが表示されます: <code>https://&lt;your-username&gt;.github.io/WebAR/</code></li>
+                </ol>
+            </div>
+            
+            <h3>2. 名刺デザインの準備</h3>
+            
+            <h4>ARマーカーのダウンロード</h4>
+            <div class="marker-preview">
+                <img src="./assets/marker.png" alt="AR Marker" onerror="this.style.display='none'">
+                <p style="margin-top: 10px;"><strong>このマーカーを名刺に印刷してください</strong></p>
+            </div>
+            
+            <div class="warning">
+                <strong>⚠️ 印刷時の注意点:</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>推奨サイズ: 5cm × 5cm 以上</li>
+                    <li>高解像度（300dpi以上）で印刷</li>
+                    <li>マットな質感の紙を使用（光沢紙は反射で認識が困難）</li>
+                    <li>マーカーが平らになるように印刷</li>
+                </ul>
+            </div>
+            
+            <h4>QRコードの生成</h4>
+            <ol style="margin-left: 20px; margin-top: 10px;">
+                <li><code>marker-generator.html</code> をブラウザで開く</li>
+                <li>「アプリケーションURL」欄にGitHub PagesのURLを入力</li>
+                <li>「QRコード生成」ボタンをクリック</li>
+                <li>生成されたQRコードをダウンロード</li>
+                <li>名刺に印刷（推奨サイズ: 2cm × 2cm）</li>
+            </ol>
+            
+            <h3>3. 表示内容のカスタマイズ</h3>
+            
+            <p><code>index.html</code> を編集して、AR表示される情報をカスタマイズします:</p>
+            
+            <div class="code-block">
+                <code>&lt;!-- 名前 --&gt;
+&lt;a-text value="山田 太郎" ...&gt;
+
+&lt;!-- 役職 --&gt;
+&lt;a-text value="Webデベロッパー" ...&gt;
+
+&lt;!-- メールアドレス --&gt;
+&lt;a-text value="yamada@example.com" ...&gt;
+
+&lt;!-- 電話番号 --&gt;
+&lt;a-text value="TEL: 03-1234-5678" ...&gt;</code>
+            </div>
+            
+            <div class="success">
+                <strong>✅ ヒント:</strong> 変更後、GitHubにpushすると自動的にGitHub Pagesに反映されます（数分かかる場合があります）。
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📱 エンドユーザー向け使用方法</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <h3><span class="step-number">1</span>QRスキャン</h3>
+                    <p>名刺のQRコードをスマートフォンでスキャン</p>
+                </div>
+                <div class="step">
+                    <h3><span class="step-number">2</span>AR起動</h3>
+                    <p>「ARを開始」ボタンをタップ</p>
+                </div>
+                <div class="step">
+                    <h3><span class="step-number">3</span>カメラ許可</h3>
+                    <p>カメラアクセスを許可</p>
+                </div>
+                <div class="step">
+                    <h3><span class="step-number">4</span>マーカー認識</h3>
+                    <p>カメラを名刺のマーカーに向ける</p>
+                </div>
+            </div>
+            
+            <div class="info" style="margin-top: 20px;">
+                <strong>💡 認識のコツ:</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>十分な照明がある場所で使用</li>
+                    <li>マーカーがカメラからはっきり見える位置</li>
+                    <li>マーカーとカメラの距離: 20cm〜50cm程度</li>
+                    <li>マーカーを平らに保つ</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🔧 技術仕様</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>内容</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ARフレームワーク</td>
+                        <td>AR.js 3.4.5 + A-Frame 1.4.2</td>
+                    </tr>
+                    <tr>
+                        <td>マーカータイプ</td>
+                        <td>パターンマーカー（カスタム）</td>
+                    </tr>
+                    <tr>
+                        <td>対応ブラウザ</td>
+                        <td>Chrome, Safari, Edge, Firefox</td>
+                    </tr>
+                    <tr>
+                        <td>必要な権限</td>
+                        <td>カメラアクセス（HTTPS必須）</td>
+                    </tr>
+                    <tr>
+                        <td>ホスティング</td>
+                        <td>GitHub Pages（自動HTTPS）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>🎨 名刺レイアウト例</h2>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                <h3 style="text-align: center; margin-bottom: 20px;">推奨レイアウト</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h4>表面</h4>
+                        <ul>
+                            <li>中央: ARマーカー（5cm × 5cm）</li>
+                            <li>上部: 名前・会社名</li>
+                            <li>下部: 連絡先情報</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>裏面または角</h4>
+                        <ul>
+                            <li>QRコード（2cm × 2cm）</li>
+                            <li>「スマホでスキャン」の説明</li>
+                            <li>SNSリンクなど</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>❓ トラブルシューティング</h2>
+            
+            <h3>カメラが起動しない</h3>
+            <ul style="margin-left: 20px;">
+                <li>ブラウザのカメラ権限を確認</li>
+                <li>HTTPSで接続していることを確認（GitHub Pagesは自動的にHTTPS）</li>
+                <li>他のアプリがカメラを使用していないか確認</li>
+            </ul>
+            
+            <h3>マーカーが認識されない</h3>
+            <ul style="margin-left: 20px;">
+                <li>マーカーのサイズが十分か確認（5cm × 5cm以上推奨）</li>
+                <li>照明が十分か確認</li>
+                <li>マーカーが平らで、折れ曲がっていないか確認</li>
+                <li>カメラのフォーカスが合っているか確認</li>
+                <li>マーカーとカメラの距離を調整（20cm〜50cm）</li>
+            </ul>
+            
+            <h3>GitHub Pagesで表示されない</h3>
+            <ul style="margin-left: 20px;">
+                <li>リポジトリが公開されているか確認</li>
+                <li>GitHub Pages設定で正しいブランチが選択されているか確認</li>
+                <li>初回公開後、数分待ってから再度アクセス</li>
+                <li>ブラウザのキャッシュをクリア</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>🔗 便利なリンク</h2>
+            
+            <div class="button-group">
+                <a href="index.html" class="button">メインアプリ</a>
+                <a href="marker-generator.html" class="button">マーカー・QR生成</a>
+                <a href="marker-training.html" class="button">マーカートレーニング</a>
+                <a href="https://ar-js-org.github.io/AR.js-Docs/" class="button button-secondary" target="_blank">AR.js ドキュメント</a>
+                <a href="https://aframe.io/docs/" class="button button-secondary" target="_blank">A-Frame ドキュメント</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>WebAR 名刺アプリケーション | MIT License</p>
+            <p>Powered by AR.js & A-Frame</p>
+        </footer>
+    </div>
+</body>
+</html>

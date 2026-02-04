@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マーカートレーニング - Marker Training</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+        }
+        
+        video {
+            width: 100%;
+            max-width: 640px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        canvas {
+            display: none;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        #status {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        #status.info {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        #status.success {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+        
+        #status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .marker-preview {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .marker-preview img {
+            max-width: 300px;
+            border: 2px solid #667eea;
+        }
+        
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        
+        .download-section {
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .download-section.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📷 ARマーカートレーニング</h1>
+        
+        <div class="instructions">
+            <h3>手順</h3>
+            <ol>
+                <li>「カメラを起動」ボタンをクリック</li>
+                <li>印刷したマーカー画像をカメラに向ける</li>
+                <li>「マーカーをキャプチャ」ボタンでマーカーをトレーニング</li>
+                <li>生成されたパターンファイルをダウンロード</li>
+                <li>pattern-marker.patt を assets/ フォルダに配置</li>
+            </ol>
+            <p><strong>注意:</strong> マーカーは平らな面に置き、カメラからしっかり見える状態で撮影してください。</p>
+        </div>
+        
+        <div id="status" class="info">カメラの準備をしてください</div>
+        
+        <video id="video" autoplay playsinline></video>
+        <canvas id="canvas"></canvas>
+        
+        <div class="button-container">
+            <button id="start-camera" onclick="startCamera()">カメラを起動</button>
+            <button id="capture-marker" onclick="captureMarker()" disabled>マーカーをキャプチャ</button>
+        </div>
+        
+        <div class="marker-preview">
+            <h3>現在のマーカー</h3>
+            <img src="./assets/marker.png" alt="AR Marker" id="marker-image" onerror="this.style.display='none'">
+            <p>このマーカーを印刷して、カメラに向けてください</p>
+        </div>
+        
+        <div id="download-section" class="download-section">
+            <h3>✅ パターンファイルの準備完了</h3>
+            <p>以下のボタンからパターンファイルをダウンロードし、<code>assets/pattern-marker.patt</code> として保存してください。</p>
+            <div class="button-container">
+                <button onclick="downloadPattern()">パターンファイルをダウンロード</button>
+            </div>
+            <details>
+                <summary>パターンデータを表示（高度な使用）</summary>
+                <pre id="pattern-data"></pre>
+            </details>
+        </div>
+        
+        <div class="instructions" style="margin-top: 30px;">
+            <h3>💡 簡単な方法</h3>
+            <p>マーカートレーニングをスキップして、事前に生成されたデフォルトパターンを使用することもできます。</p>
+            <div class="button-container">
+                <button onclick="useDefaultPattern()">デフォルトパターンを使用</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/AR.js@3.4.5/three.js/examples/vendor/three.js/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/AR.js@3.4.5/three.js/build/ar.js"></script>
+    
+    <script>
+        let video, canvas, ctx;
+        let patternData = null;
+        
+        function startCamera() {
+            video = document.getElementById('video');
+            canvas = document.getElementById('canvas');
+            ctx = canvas.getContext('2d');
+            
+            const status = document.getElementById('status');
+            status.textContent = 'カメラを初期化中...';
+            status.className = 'info';
+            
+            navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: 'environment' },
+                audio: false 
+            })
+            .then(stream => {
+                video.srcObject = stream;
+                document.getElementById('start-camera').disabled = true;
+                document.getElementById('capture-marker').disabled = false;
+                status.textContent = 'マーカーをカメラに向けてください';
+                status.className = 'info';
+            })
+            .catch(err => {
+                console.error('Camera error:', err);
+                status.textContent = 'カメラへのアクセスに失敗しました';
+                status.className = 'error';
+            });
+        }
+        
+        function captureMarker() {
+            const status = document.getElementById('status');
+            status.textContent = 'マーカーを処理中...';
+            status.className = 'info';
+            
+            // Set canvas size to video size
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Draw video frame to canvas
+            ctx.drawImage(video, 0, 0);
+            
+            // Generate pattern data
+            generatePatternData();
+            
+            status.textContent = 'パターン生成完了！';
+            status.className = 'success';
+            
+            // Show download section
+            document.getElementById('download-section').classList.add('show');
+        }
+        
+        function generatePatternData() {
+            // Generate a simple pattern based on the marker
+            // This is a simplified version - in production, use AR.js pattern generator
+            
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            
+            // Create 16x16 pattern (AR.js standard)
+            const patternSize = 16;
+            const pattern = [];
+            
+            for (let i = 0; i < 3; i++) { // RGB channels
+                const channel = [];
+                for (let y = 0; y < patternSize; y++) {
+                    const row = [];
+                    for (let x = 0; x < patternSize; x++) {
+                        // Sample the image at this position
+                        const srcX = Math.floor(x * canvas.width / patternSize);
+                        const srcY = Math.floor(y * canvas.height / patternSize);
+                        const idx = (srcY * canvas.width + srcX) * 4;
+                        
+                        // Get the color value (0-255)
+                        const value = imageData.data[idx + i];
+                        row.push(value);
+                    }
+                    channel.push(row);
+                }
+                pattern.push(channel);
+            }
+            
+            // Convert to AR.js pattern format
+            patternData = formatPattern(pattern);
+            document.getElementById('pattern-data').textContent = patternData;
+        }
+        
+        function formatPattern(pattern) {
+            let output = '';
+            
+            // Format as AR.js pattern file
+            for (let channel = 0; channel < 3; channel++) {
+                for (let y = 0; y < 16; y++) {
+                    const row = pattern[channel][y];
+                    output += row.join(' ') + '\n';
+                }
+                if (channel < 2) output += '\n';
+            }
+            
+            return output;
+        }
+        
+        function downloadPattern() {
+            if (!patternData) {
+                useDefaultPattern();
+                return;
+            }
+            
+            const blob = new Blob([patternData], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'pattern-marker.patt';
+            link.click();
+        }
+        
+        function useDefaultPattern() {
+            // Generate a simple default pattern
+            const defaultPattern = generateDefaultPattern();
+            patternData = defaultPattern;
+            document.getElementById('pattern-data').textContent = defaultPattern;
+            document.getElementById('download-section').classList.add('show');
+            
+            const status = document.getElementById('status');
+            status.textContent = 'デフォルトパターンを使用します';
+            status.className = 'success';
+            
+            // Auto download
+            const blob = new Blob([defaultPattern], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'pattern-marker.patt';
+            link.click();
+        }
+        
+        function generateDefaultPattern() {
+            // Generate a distinctive pattern for the marker
+            let output = '';
+            
+            for (let channel = 0; channel < 3; channel++) {
+                for (let y = 0; y < 16; y++) {
+                    const row = [];
+                    for (let x = 0; x < 16; x++) {
+                        // Create a pattern with center square and corners
+                        let value = 255; // white
+                        
+                        // Border
+                        if (x === 0 || x === 15 || y === 0 || y === 15) {
+                            value = 0; // black
+                        }
+                        // Center square
+                        else if (x >= 6 && x <= 9 && y >= 6 && y <= 9) {
+                            value = 0; // black
+                        }
+                        // Corner markers
+                        else if ((x <= 3 && y <= 3) || (x >= 12 && y <= 3)) {
+                            value = 0; // black
+                        }
+                        // Additional pattern
+                        else if ((x === 4 && y === 7) || (x === 11 && y === 7)) {
+                            value = 0; // black
+                        }
+                        
+                        row.push(value);
+                    }
+                    output += row.join(' ') + '\n';
+                }
+                if (channel < 2) output += '\n';
+            }
+            
+            return output;
+        }
+    </script>
+</body>
+</html>

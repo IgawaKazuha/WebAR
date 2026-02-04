@@ -175,9 +175,6 @@
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/AR.js@3.4.5/three.js/examples/vendor/three.js/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/AR.js@3.4.5/three.js/build/ar.js"></script>
-    
     <script>
         let video, canvas, ctx;
         let patternData = null;
@@ -232,8 +229,8 @@
         }
         
         function generatePatternData() {
-            // Generate a simple pattern based on the marker
-            // This is a simplified version - in production, use AR.js pattern generator
+            // Generate pattern data from captured marker image
+            // This creates an AR.js-compatible pattern file
             
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             

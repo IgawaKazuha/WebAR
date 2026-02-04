@@ -240,14 +240,18 @@
                     correctLevel: QRCode.CorrectLevel.H
                 });
                 
-                // Add download button after QR is generated
-                setTimeout(() => {
-                    const downloadBtn = document.createElement('button');
-                    downloadBtn.textContent = 'QRコードをダウンロード';
-                    downloadBtn.onclick = downloadQR;
-                    downloadBtn.style.marginTop = '10px';
-                    qrContainer.appendChild(downloadBtn);
-                }, 100);
+                // Add download button after QR canvas is generated
+                const checkCanvas = setInterval(() => {
+                    const canvas = qrContainer.querySelector('canvas');
+                    if (canvas) {
+                        clearInterval(checkCanvas);
+                        const downloadBtn = document.createElement('button');
+                        downloadBtn.textContent = 'QRコードをダウンロード';
+                        downloadBtn.onclick = downloadQR;
+                        downloadBtn.style.marginTop = '10px';
+                        qrContainer.appendChild(downloadBtn);
+                    }
+                }, 50);
             }
         }
         

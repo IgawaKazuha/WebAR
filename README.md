@@ -4,7 +4,9 @@ QRコードを使用した名刺向けWebARアプリケーション
 
 ## 🚀 デモ
 
-GitHub Pagesでホストされています: `https://あなたのユーザー名.github.io/WebAR/`
+GitHub Pagesでホストされています: `https://<your-username>.github.io/WebAR/`
+
+例: `https://igawakazuha.github.io/WebAR/`
 
 ## 📱 機能
 

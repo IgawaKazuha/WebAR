@@ -49,7 +49,7 @@ GitHub Pagesでホストされています: `https://<your-username>.github.io/W
 <a-text value="山田 太郎" ...>
 
 <!-- 役職 -->
-<a-text value="Web Developer" ...>
+<a-text value="Webデベロッパー" ...>
 
 <!-- メールアドレス -->
 <a-text value="yamada@example.com" ...>

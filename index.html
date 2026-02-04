@@ -146,7 +146,7 @@
         id="ar-scene">
         
         <a-marker type="pattern" url="./assets/pattern-marker.patt" id="marker">
-            <!-- Business card information display -->
+            <!-- 名刺情報の表示 -->
             <a-plane 
                 position="0 0 0" 
                 width="2" 
@@ -157,7 +157,6 @@
                 shadow>
             </a-plane>
             
-            <!-- Name text - CUSTOMIZE: Replace with your name -->
             <!-- 名前 - カスタマイズ: あなたの名前に変更してください -->
             <a-text 
                 value="山田 太郎" 
@@ -168,10 +167,9 @@
                 color="#333333">
             </a-text>
             
-            <!-- Title text - CUSTOMIZE: Replace with your job title -->
             <!-- 役職 - カスタマイズ: あなたの役職に変更してください -->
             <a-text 
-                value="Web Developer" 
+                value="Webデベロッパー" 
                 position="0 0.1 0.01" 
                 width="2.4" 
                 align="center"
@@ -179,8 +177,7 @@
                 color="#666666">
             </a-text>
             
-            <!-- Email - CUSTOMIZE: Replace with your email address -->
-            <!-- メール - カスタマイズ: あなたのメールアドレスに変更してください -->
+            <!-- メールアドレス - カスタマイズ: あなたのメールアドレスに変更してください -->
             <a-text 
                 value="yamada@example.com" 
                 position="0 -0.1 0.01" 
@@ -190,8 +187,7 @@
                 color="#667eea">
             </a-text>
             
-            <!-- Phone - CUSTOMIZE: Replace with your phone number -->
-            <!-- 電話 - カスタマイズ: あなたの電話番号に変更してください -->
+            <!-- 電話番号 - カスタマイズ: あなたの電話番号に変更してください -->
             <a-text 
                 value="TEL: 03-1234-5678" 
                 position="0 -0.3 0.01" 
@@ -201,7 +197,7 @@
                 color="#666666">
             </a-text>
             
-            <!-- 3D rotating box as decoration -->
+            <!-- 装飾用の回転する立方体 -->
             <a-box 
                 position="0 0.7 0.1" 
                 width="0.3" 
@@ -212,7 +208,7 @@
                 animation="property: rotation; to: -90 360 0; loop: true; dur: 3000; easing: linear">
             </a-box>
             
-            <!-- Additional 3D sphere -->
+            <!-- 追加の3D球体 -->
             <a-sphere
                 position="0.5 0.7 0.1"
                 radius="0.15"
@@ -240,7 +236,7 @@
             loading.classList.add('show');
             arScene.style.display = 'block';
             
-            // Wait for AR scene to initialize
+            // ARシーンの初期化を待つ
             const sceneEl = document.querySelector('a-scene');
             
             if (sceneEl.hasLoaded) {
@@ -256,15 +252,15 @@
             
             const marker = document.querySelector('#marker');
             
-            // Track when marker is found/lost
+            // マーカーの検出/紛失を追跡
             marker.addEventListener('markerFound', () => {
-                console.log('Marker found');
+                console.log('マーカー検出');
                 arInfo.textContent = 'AR表示中！';
                 arInfo.style.background = 'rgba(102, 126, 234, 0.9)';
             });
             
             marker.addEventListener('markerLost', () => {
-                console.log('Marker lost');
+                console.log('マーカー紛失');
                 arInfo.textContent = 'カメラを名刺に向けてください';
                 arInfo.style.background = 'rgba(0, 0, 0, 0.7)';
             });

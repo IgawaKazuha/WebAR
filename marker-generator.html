@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マーカー生成 - Marker Generator</title>
+    <title>ARマーカー生成ツール</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -158,53 +158,53 @@
     </div>
     
     <script>
-        // Generate marker image
+        // マーカー画像を生成
         function drawMarker() {
             const canvas = document.getElementById('marker-canvas');
             const ctx = canvas.getContext('2d');
             const size = 500;
             
-            // White background
+            // 白い背景
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, size, size);
             
-            // Black border
+            // 黒い枠線
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, size, size);
             
-            // White inner area
+            // 白い内側エリア
             const borderWidth = 50;
             ctx.fillStyle = 'white';
             ctx.fillRect(borderWidth, borderWidth, size - borderWidth * 2, size - borderWidth * 2);
             
-            // Draw unique pattern for AR recognition
+            // AR認識用のユニークなパターンを描画
             ctx.fillStyle = 'black';
             
-            // Draw a unique pattern - simple geometric design
+            // シンプルな幾何学的デザインのユニークなパターンを描画
             const innerSize = size - borderWidth * 2;
             const center = size / 2;
             
-            // Center square
+            // 中央の正方形
             const squareSize = innerSize * 0.3;
             ctx.fillRect(center - squareSize/2, center - squareSize/2, squareSize, squareSize);
             
-            // Corner markers for better tracking
+            // トラッキング精度向上のためのコーナーマーカー
             const cornerSize = innerSize * 0.15;
             const offset = borderWidth + 30;
             
-            // Top-left corner
+            // 左上のコーナー
             ctx.fillRect(offset, offset, cornerSize, cornerSize);
             
-            // Top-right corner
+            // 右上のコーナー
             ctx.fillRect(size - offset - cornerSize, offset, cornerSize, cornerSize);
             
-            // Bottom-left corner - different pattern
+            // 左下のコーナー - 異なるパターン
             ctx.fillStyle = 'white';
             ctx.fillRect(offset, size - offset - cornerSize, cornerSize, cornerSize);
             ctx.fillStyle = 'black';
             ctx.fillRect(offset + 10, size - offset - cornerSize + 10, cornerSize - 20, cornerSize - 20);
             
-            // Additional pattern elements
+            // 追加のパターン要素
             ctx.fillStyle = 'black';
             const smallSquare = innerSize * 0.08;
             ctx.fillRect(center - innerSize * 0.25, center, smallSquare, smallSquare);
@@ -227,7 +227,7 @@
             const url = document.getElementById('url-input').value;
             const qrContainer = document.getElementById('qr-code');
             
-            // Clear previous QR code
+            // 前のQRコードをクリア
             qrContainer.innerHTML = '';
             
             if (url) {
@@ -240,7 +240,7 @@
                     correctLevel: QRCode.CorrectLevel.H
                 });
                 
-                // Add download button after QR canvas is generated
+                // QRキャンバス生成後にダウンロードボタンを追加
                 const checkCanvas = setInterval(() => {
                     const canvas = qrContainer.querySelector('canvas');
                     if (canvas) {
@@ -265,7 +265,7 @@
             }
         }
         
-        // Draw marker on page load
+        // ページロード時にマーカーを描画
         drawMarker();
     </script>
 </body>

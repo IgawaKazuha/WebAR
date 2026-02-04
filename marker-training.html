@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マーカートレーニング - Marker Training</title>
+    <title>ARマーカートレーニング</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -211,44 +211,44 @@
             status.textContent = 'マーカーを処理中...';
             status.className = 'info';
             
-            // Set canvas size to video size
+            // キャンバスサイズをビデオサイズに設定
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             
-            // Draw video frame to canvas
+            // ビデオフレームをキャンバスに描画
             ctx.drawImage(video, 0, 0);
             
-            // Generate pattern data
+            // パターンデータを生成
             generatePatternData();
             
             status.textContent = 'パターン生成完了！';
             status.className = 'success';
             
-            // Show download section
+            // ダウンロードセクションを表示
             document.getElementById('download-section').classList.add('show');
         }
         
         function generatePatternData() {
-            // Generate pattern data from captured marker image
-            // This creates an AR.js-compatible pattern file
+            // キャプチャしたマーカー画像からパターンデータを生成
+            // AR.js互換のパターンファイルを作成
             
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             
-            // Create 16x16 pattern (AR.js standard)
+            // 16x16パターンを作成（AR.js標準）
             const patternSize = 16;
             const pattern = [];
             
-            for (let i = 0; i < 3; i++) { // RGB channels
+            for (let i = 0; i < 3; i++) { // RGBチャンネル
                 const channel = [];
                 for (let y = 0; y < patternSize; y++) {
                     const row = [];
                     for (let x = 0; x < patternSize; x++) {
-                        // Sample the image at this position
+                        // この位置の画像をサンプリング
                         const srcX = Math.floor(x * canvas.width / patternSize);
                         const srcY = Math.floor(y * canvas.height / patternSize);
                         const idx = (srcY * canvas.width + srcX) * 4;
                         
-                        // Get the color value (0-255)
+                        // 色の値を取得（0-255）
                         const value = imageData.data[idx + i];
                         row.push(value);
                     }
@@ -257,7 +257,7 @@
                 pattern.push(channel);
             }
             
-            // Convert to AR.js pattern format
+            // AR.jsパターンフォーマットに変換
             patternData = formatPattern(pattern);
             document.getElementById('pattern-data').textContent = patternData;
         }
@@ -265,7 +265,7 @@
         function formatPattern(pattern) {
             let output = '';
             
-            // Format as AR.js pattern file
+            // AR.jsパターンファイルとしてフォーマット
             for (let channel = 0; channel < 3; channel++) {
                 for (let y = 0; y < 16; y++) {
                     const row = pattern[channel][y];
@@ -291,7 +291,7 @@
         }
         
         function useDefaultPattern() {
-            // Generate a simple default pattern
+            // シンプルなデフォルトパターンを生成
             const defaultPattern = generateDefaultPattern();
             patternData = defaultPattern;
             document.getElementById('pattern-data').textContent = defaultPattern;
@@ -301,7 +301,7 @@
             status.textContent = 'デフォルトパターンを使用します';
             status.className = 'success';
             
-            // Auto download
+            // 自動ダウンロード
             const blob = new Blob([defaultPattern], { type: 'text/plain' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -310,31 +310,31 @@
         }
         
         function generateDefaultPattern() {
-            // Generate a distinctive pattern for the marker
+            // マーカー用の特徴的なパターンを生成
             let output = '';
             
             for (let channel = 0; channel < 3; channel++) {
                 for (let y = 0; y < 16; y++) {
                     const row = [];
                     for (let x = 0; x < 16; x++) {
-                        // Create a pattern with center square and corners
-                        let value = 255; // white
+                        // 中央の正方形とコーナーを持つパターンを作成
+                        let value = 255; // 白
                         
-                        // Border
+                        // 枠線
                         if (x === 0 || x === 15 || y === 0 || y === 15) {
-                            value = 0; // black
+                            value = 0; // 黒
                         }
-                        // Center square
+                        // 中央の正方形
                         else if (x >= 6 && x <= 9 && y >= 6 && y <= 9) {
-                            value = 0; // black
+                            value = 0; // 黒
                         }
-                        // Corner markers
+                        // コーナーマーカー
                         else if ((x <= 3 && y <= 3) || (x >= 12 && y <= 3)) {
-                            value = 0; // black
+                            value = 0; // 黒
                         }
-                        // Additional pattern
+                        // 追加パターン
                         else if ((x === 4 && y === 7) || (x === 11 && y === 7)) {
-                            value = 0; // black
+                            value = 0; // 黒
                         }
                         
                         row.push(value);

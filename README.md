@@ -93,7 +93,8 @@ WebAR/
 ├── marker-training.html        # カスタムマーカートレーニング（オプション）
 ├── assets/
 │   ├── marker.png             # 印刷用マーカー画像
-│   └── pattern-marker.patt    # AR.js用マーカーパターン
+│   ├── pattern-marker.patt    # AR.js用マーカーパターン（旧）
+│   └── pattern-QR_400091.patt # AR.js用QRマーカーパターン（固定トラッキング有効）
 └── README.md                   # このファイル
 ```
 

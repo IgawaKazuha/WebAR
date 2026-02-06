@@ -140,12 +140,12 @@
     
     <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: true; detectionMode: mono; patternRatio: 0.5;"
+        arjs="sourceType: webcam; debugUIEnabled: true; detectionMode: mono_and_matrix; matrixCodeType: 3x3; patternRatio: 0.75;"
         vr-mode-ui="enabled: false"
         style="display: none;"
         id="ar-scene">
         
-        <a-marker type="pattern" url="./assets/pattern-marker.patt" smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2" id="marker">
+        <a-marker preset="hiro" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5" id="marker">
             <!-- 名刺情報の表示 -->
             <a-plane 
                 position="0 0 0" 

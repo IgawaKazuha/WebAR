@@ -145,7 +145,7 @@
         style="display: none;"
         id="ar-scene">
         
-        <a-marker type="pattern" url="./assets/pattern-QR_400091.patt" smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2" id="marker">
+        <a-marker type="pattern" url="./assets/pattern-QR_402269.patt" smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2" id="marker">
             <!-- 名刺情報の表示 -->
             <a-plane 
                 position="0 0 0" 
@@ -197,24 +197,14 @@
                 color="#666666">
             </a-text>
             
-            <!-- 装飾用の回転する立方体 -->
-            <a-box 
-                position="0 0.7 0.1" 
-                width="0.3" 
-                height="0.3" 
-                depth="0.3" 
-                color="#667eea"
+            <!-- 3Dモデル -->
+            <a-entity
+                gltf-model="./assets/lAgalia.glb"
+                position="0 0.5 0"
+                scale="0.5 0.5 0.5"
                 rotation="-90 0 0"
-                animation="property: rotation; to: -90 360 0; loop: true; dur: 3000; easing: linear">
-            </a-box>
-            
-            <!-- 追加の3D球体 -->
-            <a-sphere
-                position="0.5 0.7 0.1"
-                radius="0.15"
-                color="#764ba2"
-                animation="property: position; to: -0.5 0.7 0.1; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
-            </a-sphere>
+                animation="property: rotation; to: -90 360 0; loop: true; dur: 8000; easing: linear">
+            </a-entity>
         </a-marker>
         
         <a-entity camera></a-entity>

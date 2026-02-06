@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebAR 名刺 - Business Card AR</title>
     <meta name="description" content="QRコードを使用したWebAR名刺アプリケーション">
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js"></script>
     <style>
         body {
             margin: 0;
@@ -140,12 +140,12 @@
     
     <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: true; detectionMode: mono_and_matrix; matrixCodeType: 3x3; patternRatio: 0.75;"
+        arjs="sourceType: webcam; debugUIEnabled: false;"
         vr-mode-ui="enabled: false"
         style="display: none;"
         id="ar-scene">
         
-        <a-marker preset="hiro" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5" id="marker">
+        <a-marker preset="hiro" id="marker">
             <!-- 名刺情報の表示 -->
             <a-plane 
                 position="0 0 0" 

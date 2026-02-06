@@ -145,7 +145,7 @@
         style="display: none;"
         id="ar-scene">
         
-        <a-marker type="pattern" url="./assets/pattern-QR_402269.patt" id="marker">
+        <a-marker type="pattern" url="./assets/pattern-QR_402269.patt" id="marker" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="2">
             <!-- 名刺情報の表示 -->
             <a-plane 
                 position="0 0 0" 
@@ -203,7 +203,6 @@
                 position="0 0.4 0"
                 scale="0.3 0.3 0.3"
                 rotation="0 0 0">
-                <a-animation attribute="rotation" to="0 360 0" dur="8000" repeat="indefinite" easing="linear"></a-animation>
             </a-entity>
         </a-marker>
         

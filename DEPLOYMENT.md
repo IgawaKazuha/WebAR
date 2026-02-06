@@ -1,55 +1,55 @@
 # 🚀 デプロイメントガイド (Deployment Guide)
 
-このドキュメントでは、WebAR名刺アプリケーションをGitHub Pagesにデプロイする方法を説明します。
+このドキュメントでは、WebAR名刺アプリケーションをCloudflare Pagesにデプロイする方法を説明します。
 
 ## 📋 前提条件
 
 - GitHubアカウント
-- このリポジトリへの書き込み権限（オーナーまたは管理者）
+- Cloudflareアカウント（無料）
 
-## ⚙️ GitHub Pagesの設定
+## ⚙️ Cloudflare Pagesの設定
 
-### 1. リポジトリ設定にアクセス
+### 1. Cloudflareダッシュボードにアクセス
 
-1. GitHubでリポジトリを開く: `https://github.com/IgawaKazuha/WebAR`
-2. 「Settings」タブをクリック
-3. 左サイドバーの「Pages」を選択
+1. [Cloudflare Dashboard](https://dash.cloudflare.com/) にログイン
+2. 左サイドバーの「Workers & Pages」を選択
+3. 「Create」→「Pages」→「Connect to Git」をクリック
 
-### 2. ソースブランチを設定
+### 2. GitHubリポジトリを接続
 
-1. **Source** セクションで以下を設定:
-   - Branch: `main` を選択
-   - Folder: `/ (root)` を選択
-2. **Save** ボタンをクリック
+1. GitHubアカウントを連携
+2. リポジトリ `WebAR` を選択
+3. **Build settings** で以下を設定:
+   - Framework preset: `None`
+   - Build command: （空欄）
+   - Build output directory: `/`
+4. **Save and Deploy** をクリック
 
 ### 3. デプロイの確認
 
-1. 数分待つ（初回は5〜10分かかる場合があります）
-2. ページをリロードすると、URLが表示されます:
+1. 数分待つ（初回は2〜5分かかる場合があります）
+2. デプロイ完了後、URLが表示されます:
    ```
-   Your site is live at https://igawakazuha.github.io/WebAR/
+   Your site is live at https://webar-36q.pages.dev/
    ```
 3. URLをクリックしてアプリケーションを確認
 
 ## 🔄 更新のデプロイ
 
-コードを変更した後、GitHub Pagesは自動的に更新されます:
+コードを変更した後、Cloudflare Pagesは自動的に更新されます:
 
 1. 変更をコミット: `git commit -m "Update business card info"`
 2. GitHubにプッシュ: `git push origin main`
-3. 数分待つ（通常1〜3分）
+3. 数分待つ（通常1〜2分）
 4. ブラウザでページをリロード（キャッシュクリアが必要な場合があります）
 
 ## 🎯 カスタムドメインの設定（オプション）
 
 独自のドメイン（例: ar.example.com）を使用する場合:
 
-1. DNS設定でCNAMEレコードを追加:
-   ```
-   ar.example.com -> igawakazuha.github.io
-   ```
-2. GitHub Pages設定の「Custom domain」にドメインを入力
-3. 「Enforce HTTPS」にチェックを入れる（推奨）
+1. Cloudflare Pagesのプロジェクト設定で「Custom domains」を選択
+2. ドメインを入力して追加
+3. Cloudflareでドメインを管理している場合は自動設定
 
 ## 📱 QRコードの更新
 
@@ -58,14 +58,14 @@
 1. `marker-generator.html` をブラウザで開く
 2. 「アプリケーションURL」に実際のURLを入力:
    ```
-   https://igawakazuha.github.io/WebAR/
+   https://webar-36q.pages.dev/
    ```
 3. 「QRコード生成」をクリック
 4. ダウンロードして名刺に印刷
 
 ## ✅ デプロイ確認チェックリスト
 
-- [ ] GitHub Pagesが有効化されている
+- [ ] Cloudflare Pagesのデプロイが成功している
 - [ ] URLにアクセスできる
 - [ ] スプラッシュ画面が表示される
 - [ ] 「ARを開始」ボタンが機能する
@@ -82,15 +82,15 @@
 
 ### カメラが動作しない
 
-- GitHub PagesはHTTPSを自動的に使用するので問題なし
+- Cloudflare PagesはHTTPSを自動的に使用するので問題なし
 - ブラウザのカメラ権限を確認
 - プライベートブラウジング/シークレットモードでは動作しない場合がある
 
 ### 変更が反映されない
 
 - ブラウザのキャッシュをクリア（Ctrl+Shift+R または Cmd+Shift+R）
-- GitHub Actionsでビルドが完了するまで数分待つ
-- GitHubの「Actions」タブでビルドステータスを確認
+- Cloudflareダッシュボードでデプロイが完了するまで数分待つ
+- 「Deployments」タブでビルドステータスを確認
 
 ## 📊 アナリティクス（オプション）
 
@@ -109,7 +109,7 @@
 
 ## 🔐 セキュリティ
 
-- GitHub Pagesは自動的にHTTPSを有効化
+- Cloudflare Pagesは自動的にHTTPSを有効化
 - カメラアクセスにはHTTPSが必須
 - 外部スクリプト（A-Frame、AR.js）はCDN経由で読み込み
 - 個人情報は含めないことを推奨（名刺に印刷される情報のみ）
@@ -118,13 +118,13 @@
 
 問題が発生した場合:
 
-1. [GitHub Pages ドキュメント](https://docs.github.com/ja/pages)を確認
+1. [Cloudflare Pages ドキュメント](https://developers.cloudflare.com/pages/)を確認
 2. リポジトリの Issues に問題を報告
 3. README.md のトラブルシューティングセクションを参照
 
 ## 📝 次のステップ
 
-1. ✅ GitHub Pagesを設定
+1. ✅ Cloudflare Pagesを設定
 2. ✅ URLを確認
 3. ✅ 正しいURLでQRコードを生成
 4. ✅ マーカーとQRコードを名刺に印刷

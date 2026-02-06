@@ -2,7 +2,7 @@
 
 ## 🎯 プロジェクト目標
 
-名刺に搭載するQRコードを使用したWebARアプリケーションを開発し、GitHub Pagesで公開する。
+名刺に搭載するQRコードを使用したWebARアプリケーションを開発し、Cloudflare Pagesで公開する。
 
 **ステータス:** ✅ 完了
 
@@ -76,7 +76,7 @@
 - 開発者向けガイド
 
 **`DEPLOYMENT.md`:**
-- GitHub Pages設定手順
+- Cloudflare Pages設定手順
 - デプロイメント確認方法
 - カスタムドメイン設定
 - トラブルシューティング
@@ -93,7 +93,7 @@
 
 ### 名刺作成者フロー:
 
-1. **GitHub Pagesを有効化** → アプリをデプロイ
+1. **Cloudflare Pagesを有効化** → アプリをデプロイ
 2. **マーカーをダウンロード** → 名刺に印刷（5cm×5cm）
 3. **QRコードを生成** → 名刺に印刷（2cm×2cm）
 4. **情報をカスタマイズ** → index.htmlを編集
@@ -102,7 +102,7 @@
 ## 🔒 セキュリティ
 
 - ✅ CodeQLスキャン実施（問題なし）
-- ✅ HTTPS必須（GitHub Pagesで自動有効化）
+- ✅ HTTPS必須（Cloudflare Pagesで自動有効化）
 - ✅ カメラ権限のみ使用
 - ✅ 外部スクリプトはCDN経由
 - ✅ 個人情報の最小化
@@ -127,7 +127,7 @@
 4. **3Dアニメーション** - 視覚的に魅力的
 5. **モバイル対応** - スマートフォンで完全動作
 6. **ゼロビルド** - 追加設定不要
-7. **GitHub Pages対応** - 無料ホスティング
+7. **Cloudflare Pages対応** - 無料ホスティング
 
 ## 🚀 デプロイ準備完了
 
@@ -137,12 +137,12 @@
 - ✅ コードレビュー完了
 - ✅ セキュリティスキャン完了
 - ✅ ドキュメント完備
-- ✅ GitHub Pages対応
+- ✅ Cloudflare Pages対応
 
 ## 📝 次のステップ（ユーザー向け）
 
 1. PRをマージ
-2. GitHub Pages設定（Settings > Pages > main ブランチを選択）
+2. Cloudflare Pages設定（Workers & Pages > Connect to Git）
 3. デプロイ完了を待つ（数分）
 4. URLにアクセスして動作確認
 5. QRコードを正しいURLで生成
@@ -155,12 +155,12 @@ WebAR名刺アプリケーションの実装が完了しました！
 
 **デモURL（デプロイ後）:**
 ```
-https://igawakazuha.github.io/WebAR/
+https://webar-36q.pages.dev/
 ```
 
 ---
 
 **開発日時:** 2026-02-04  
 **技術スタック:** AR.js, A-Frame, Pure JavaScript  
-**デプロイ先:** GitHub Pages  
+**デプロイ先:** Cloudflare Pages  
 **ライセンス:** MIT

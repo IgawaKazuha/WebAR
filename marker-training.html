@@ -128,17 +128,37 @@
         
         <div class="instructions">
             <h3>手順</h3>
+            <p><strong>方法1: 画像ファイルをアップロード</strong></p>
+            <ol>
+                <li>「画像を選択」ボタンでマーカー画像をアップロード</li>
+                <li>「パターンを生成」ボタンをクリック</li>
+                <li>生成されたパターンファイルをダウンロード</li>
+            </ol>
+            <p><strong>方法2: カメラでキャプチャ</strong></p>
             <ol>
                 <li>「カメラを起動」ボタンをクリック</li>
                 <li>印刷したマーカー画像をカメラに向ける</li>
-                <li>「マーカーをキャプチャ」ボタンでマーカーをトレーニング</li>
-                <li>生成されたパターンファイルをダウンロード</li>
-                <li>pattern-marker.patt を assets/ フォルダに配置</li>
+                <li>「マーカーをキャプチャ」ボタンでトレーニング</li>
             </ol>
-            <p><strong>注意:</strong> マーカーは平らな面に置き、カメラからしっかり見える状態で撮影してください。</p>
         </div>
         
-        <div id="status" class="info">カメラの準備をしてください</div>
+        <div id="status" class="info">マーカー画像を選択するか、カメラを起動してください</div>
+        
+        <!-- 画像アップロードセクション -->
+        <div style="text-align: center; margin: 20px 0; padding: 20px; background: #f0f4ff; border-radius: 10px;">
+            <h3>📁 画像からパターンを生成</h3>
+            <input type="file" id="image-upload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+            <button onclick="document.getElementById('image-upload').click()">画像を選択</button>
+            <div id="uploaded-preview" style="margin: 15px 0; display: none;">
+                <img id="uploaded-image" style="max-width: 300px; border: 2px solid #667eea; border-radius: 5px;">
+                <br><br>
+                <button onclick="generateFromUpload()">パターンを生成</button>
+            </div>
+        </div>
+        
+        <hr style="margin: 30px 0;">
+        
+        <h3 style="text-align: center;">📷 カメラでキャプチャ</h3>
         
         <video id="video" autoplay playsinline></video>
         <canvas id="canvas"></canvas>
@@ -178,6 +198,59 @@
     <script>
         let video, canvas, ctx;
         let patternData = null;
+        let uploadedImage = null;
+        
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('uploaded-image');
+                img.src = e.target.result;
+                document.getElementById('uploaded-preview').style.display = 'block';
+                uploadedImage = new Image();
+                uploadedImage.src = e.target.result;
+                
+                const status = document.getElementById('status');
+                status.textContent = '画像を読み込みました。「パターンを生成」をクリックしてください';
+                status.className = 'info';
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function generateFromUpload() {
+            if (!uploadedImage) {
+                alert('画像を先に選択してください');
+                return;
+            }
+            
+            const status = document.getElementById('status');
+            status.textContent = 'パターンを生成中...';
+            status.className = 'info';
+            
+            canvas = document.getElementById('canvas');
+            ctx = canvas.getContext('2d');
+            
+            // 画像を正方形にトリミング
+            const size = Math.min(uploadedImage.width, uploadedImage.height);
+            canvas.width = size;
+            canvas.height = size;
+            
+            // 中央からクロップ
+            const offsetX = (uploadedImage.width - size) / 2;
+            const offsetY = (uploadedImage.height - size) / 2;
+            
+            ctx.drawImage(uploadedImage, offsetX, offsetY, size, size, 0, 0, size, size);
+            
+            // パターンデータを生成
+            generatePatternData();
+            
+            status.textContent = 'パターン生成完了！ダウンロードしてください';
+            status.className = 'success';
+            
+            document.getElementById('download-section').classList.add('show');
+        }
         
         function startCamera() {
             video = document.getElementById('video');
@@ -265,16 +338,30 @@
         function formatPattern(pattern) {
             let output = '';
             
-            // AR.jsパターンファイルとしてフォーマット
-            for (let channel = 0; channel < 3; channel++) {
-                for (let y = 0; y < 16; y++) {
-                    const row = pattern[channel][y];
-                    output += row.join(' ') + '\n';
+            // AR.jsパターンファイル: 4方向の回転が必要
+            // 0度、90度、180度、270度のパターンを生成
+            for (let rotation = 0; rotation < 4; rotation++) {
+                for (let channel = 0; channel < 3; channel++) {
+                    for (let y = 0; y < 16; y++) {
+                        const row = [];
+                        for (let x = 0; x < 16; x++) {
+                            // 回転に応じて座標を変換
+                            let srcX, srcY;
+                            switch(rotation) {
+                                case 0: srcX = x; srcY = y; break;
+                                case 1: srcX = 15 - y; srcY = x; break;
+                                case 2: srcX = 15 - x; srcY = 15 - y; break;
+                                case 3: srcX = y; srcY = 15 - x; break;
+                            }
+                            row.push(pattern[channel][srcY][srcX]);
+                        }
+                        output += row.join(' ') + '\n';
+                    }
                 }
-                if (channel < 2) output += '\n';
+                output += '\n';
             }
             
-            return output;
+            return output.trim();
         }
         
         function downloadPattern() {

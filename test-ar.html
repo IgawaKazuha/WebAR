@@ -6,26 +6,63 @@
   <title>AR.js テスト</title>
   <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
   <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js"></script>
+  <style>
+    #debug-info {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 12px;
+      z-index: 9999;
+      max-width: 300px;
+    }
+  </style>
 </head>
 <body style='margin: 0; overflow: hidden;'>
 
-<a-scene embedded arjs="debugUIEnabled:false;">
+<div id="debug-info">
+  状態: 読み込み中...
+</div>
+
+<a-scene embedded arjs="debugUIEnabled:true; sourceType: webcam;">
 
   <!-- hiroマーカー -->
-  <a-marker preset="hiro">
-    <a-sphere scale=".25 .25 .25" position="0 .5 0" color="#111">
-      <a-animation attribute="position" to="0 1 0" direction="alternate" dur="2000" repeat="indefinite"></a-animation>
-    </a-sphere>
-  </a-marker>
-
-  <!-- カスタムマーカー -->
-  <a-marker type='pattern' url='./assets/pattern-marker.patt'>
-    <a-sphere scale=".25 .25 .25" position="0 .5 0" color="#f00">
-      <a-animation attribute="position" to="0 1 0" direction="alternate" dur="2000" repeat="indefinite"></a-animation>
-    </a-sphere>
+  <a-marker preset="hiro" id="hiro-marker">
+    <a-box position="0 0.5 0" material="color: red;" scale="0.5 0.5 0.5"></a-box>
   </a-marker>
 
   <a-entity camera></a-entity>
 </a-scene>
+
+<script>
+  const debugInfo = document.getElementById('debug-info');
+  
+  // シーン読み込み確認
+  const scene = document.querySelector('a-scene');
+  scene.addEventListener('loaded', () => {
+    debugInfo.innerHTML = '状態: シーン読み込み完了<br>';
+  });
+  
+  // マーカー検出
+  const marker = document.getElementById('hiro-marker');
+  marker.addEventListener('markerFound', () => {
+    debugInfo.innerHTML += 'マーカー検出！<br>';
+  });
+  marker.addEventListener('markerLost', () => {
+    debugInfo.innerHTML += 'マーカーロスト<br>';
+  });
+  
+  // カメラエラー
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(() => {
+      debugInfo.innerHTML += 'カメラ: OK<br>';
+    })
+    .catch((err) => {
+      debugInfo.innerHTML += 'カメラエラー: ' + err.message + '<br>';
+    });
+</script>
 </body>
 </html>

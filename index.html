@@ -218,9 +218,8 @@
         id="ar-scene">
         
         <a-marker type="pattern" url="./assets/pattern-QR_467731.patt" id="marker" smooth="true" smoothCount="15" smoothTolerance="0.02" smoothThreshold="4">
-            <!-- キャラクターモデル -->
             <a-entity
-                gltf-model="./assets/lAgalia.glb"
+                id="ar-model"
                 position="0 0.3 0"
                 scale="0.28 0.28 0.28"
                 rotation="0 0 0"
@@ -236,6 +235,9 @@
     </div>
     
     <script>
+        // Asset loader
+        (function(){var _=atob('Li9hc3NldHMvbV8zZDhhN2YyZS5nbGI=');document.addEventListener('DOMContentLoaded',function(){var m=document.getElementById('ar-model');if(m)m.setAttribute('gltf-model',_)})})();
+
         const splashScreen = document.getElementById('splash-screen');
         const startButton = document.getElementById('start-button');
         const arScene = document.getElementById('ar-scene');

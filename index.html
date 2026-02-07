@@ -24,13 +24,15 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             z-index: 1000;
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 16px 16px 24px;
             box-sizing: border-box;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         #splash-screen.hidden {
@@ -38,21 +40,22 @@
         }
         
         #splash-screen h1 {
-            font-size: 1.6em;
-            margin-bottom: 12px;
+            font-size: 1.4em;
+            margin-bottom: 6px;
+            margin-top: 12px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         #splash-screen p {
-            font-size: 0.95em;
-            margin-bottom: 14px;
+            font-size: 0.85em;
+            margin-bottom: 8px;
             max-width: 90vw;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         
         #start-button {
-            padding: 16px 44px;
-            font-size: 1.1em;
+            padding: 12px 36px;
+            font-size: 1em;
             background-color: white;
             color: #667eea;
             border: none;
@@ -61,9 +64,8 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
             font-weight: bold;
-            /* タップしやすいサイズ */
-            min-height: 48px;
-            min-width: 200px;
+            min-height: 44px;
+            min-width: 180px;
         }
         
         #start-button:hover {
@@ -77,14 +79,14 @@
         }
         
         #instructions {
-            margin-top: 16px;
-            font-size: 0.85em;
+            margin-top: 10px;
+            font-size: 0.78em;
             opacity: 0.9;
         }
         
         .example-section {
-            margin-top: 20px;
-            padding: 16px;
+            margin-top: 12px;
+            padding: 12px;
             background: rgba(255,255,255,0.1);
             border-radius: 10px;
             max-width: 90vw;
@@ -93,29 +95,29 @@
         
         .example-section h3 {
             margin-top: 0;
-            font-size: 1em;
+            font-size: 0.9em;
         }
         
         .example-section p {
-            font-size: 0.9em;
-            margin-bottom: 6px;
+            font-size: 0.82em;
+            margin-bottom: 4px;
         }
         
         .security-note {
-            margin-top: 20px;
-            padding: 14px 16px;
+            margin-top: 12px;
+            padding: 10px 14px;
             background: rgba(255,255,255,0.15);
             border-radius: 10px;
             max-width: 90vw;
             width: 100%;
-            font-size: 0.8em;
-            line-height: 1.7;
+            font-size: 0.72em;
+            line-height: 1.6;
             text-align: left;
         }
         
         .security-note h4 {
-            margin: 0 0 8px 0;
-            font-size: 0.95em;
+            margin: 0 0 6px 0;
+            font-size: 0.85em;
             text-align: center;
         }
         
@@ -129,20 +131,20 @@
         }
         
         .rights-note {
-            margin-top: 16px;
-            padding: 14px 16px;
+            margin-top: 10px;
+            padding: 10px 14px;
             background: rgba(255,255,255,0.12);
             border-radius: 10px;
             max-width: 90vw;
             width: 100%;
-            font-size: 0.75em;
-            line-height: 1.7;
+            font-size: 0.68em;
+            line-height: 1.6;
             text-align: left;
         }
         
         .rights-note h4 {
-            margin: 0 0 8px 0;
-            font-size: 0.9em;
+            margin: 0 0 6px 0;
+            font-size: 0.82em;
             text-align: center;
         }
         
@@ -234,7 +236,7 @@
         </div>
         <div class="rights-note">
             <h4>© 権利表記</h4>
-            <p class="credit">『Lost Arcadia』(C)夕凪レプト明織／彁IL,繲IL,宮坂ILRe:version</p>
+            <p class="credit">『Lost Arcadia』(C)夕凪レプト明織/彁IL,緲IL,宮坂/Re:version</p>
             <p>本アプリは非営利の個人制作（同人）です。イラスト素材を改変せず、AR表示という演出を付与しております。<a href="https://rev2.reversion.jp/info/system/3/5" target="_blank" rel="noopener" style="color: #cce0ff; text-decoration: underline;">ガイドライン</a>に基づき制作しています。</p>
         </div>
     </div>
